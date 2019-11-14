@@ -1,4 +1,4 @@
-package myTraining;
+package mainpackage;
 
 public class Main {
 
