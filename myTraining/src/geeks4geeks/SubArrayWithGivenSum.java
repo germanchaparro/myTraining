@@ -5,23 +5,25 @@ import java.util.Scanner;
 // from https://practice.geeksforgeeks.org/problems/subarray-with-given-sum/0
 public class SubArrayWithGivenSum {
 
-	public static void subArrayGivenSum(long arrayIntegers[], int N, int S)
+	public static void subArrayGivenSum(long arrayIntegers[], int N, long S)
 	{
-		int sum = 0;
+		long sum = 0;
 		int initialPosition = 0;
 		int finalPosition = 0;
-		while(sum < S || initialPosition < N)
+		boolean foundSum = false;
+		while(sum < S && initialPosition < N)
 		{
 			sum += arrayIntegers[finalPosition];
 			finalPosition++;
+			
 			if(sum == S)
 			{
-				System.out.println(initialPosition+1 + " " + finalPosition);
+				foundSum = true;
 				break;
 			}
-			else if(sum < S && finalPosition == N)
+			else if(sum < S && finalPosition >= N)
 			{
-				System.out.println(-1);
+				foundSum = false;
 				break;
 			}
 			else if(sum > S)
@@ -30,7 +32,15 @@ public class SubArrayWithGivenSum {
 				finalPosition = initialPosition;
 				sum = 0;
 			}
-		}		
+		}
+		if(foundSum)
+		{
+			System.out.println(initialPosition+1 + " " + finalPosition);
+		}
+		else
+		{
+			System.out.println(-1);
+		}
 	}
 	
 	public static void main(String[] args) {
@@ -41,7 +51,7 @@ public class SubArrayWithGivenSum {
 		{
 			int N = sc.nextInt();
 			long arrayIntegers[] = new long[N];
-			int S = sc.nextInt();
+			long S = sc.nextLong();
 			for (int j = 0; j < N; j++)
 			{
 				arrayIntegers[j] = sc.nextLong();
