@@ -2,6 +2,7 @@ package geeks4geeks;
 
 import java.util.Scanner;
 
+//from https://practice.geeksforgeeks.org/problems/kadanes-algorithm/0
 public class KadanesAlgorithm {
 	
 	// my algorithm works but it is to slow
