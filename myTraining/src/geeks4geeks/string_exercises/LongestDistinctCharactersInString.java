@@ -1,4 +1,4 @@
-package geeks4geeks;
+package geeks4geeks.string_exercises;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package geeks4geeks;
+package geeks4geeks.array_exercises;
 
 import java.util.Arrays;
 import java.util.Scanner;
