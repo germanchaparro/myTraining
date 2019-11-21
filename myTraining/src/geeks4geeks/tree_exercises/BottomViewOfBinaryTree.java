@@ -20,6 +20,14 @@ public class BottomViewOfBinaryTree {
 
 	HashMap<Integer, Stack<Integer>> myHashMap = new HashMap<>();
 	
+	void InsertInMap(int key, int value)
+	{
+		if(myHashMap.get(key) == null)
+		{
+			Stack<Integer>
+		}
+	}
+	
 	void SetHorizontalDistance(Node node)
 	{
 		if(node == null)
@@ -88,6 +96,10 @@ public class BottomViewOfBinaryTree {
     	{
     		return;
     	}
+    	
+    	SetHorizontalDistance(root);
+    	
+    	
     	inOrder(root);
     	printArray();
     }
