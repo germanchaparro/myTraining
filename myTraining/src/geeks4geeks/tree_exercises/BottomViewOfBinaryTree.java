@@ -1,7 +1,12 @@
 package geeks4geeks.tree_exercises;
 
-import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Queue;
 import java.util.Stack;
+import java.util.TreeMap;
 
 class Node
 {
@@ -17,33 +22,71 @@ class Node
 }
 
 public class BottomViewOfBinaryTree {
+	String listType = "stack";
+	TreeMap myHashMap;
 
-	HashMap<Integer, Stack<Integer>> myHashMap = new HashMap<>();
+	
+	BottomViewOfBinaryTree(String type)
+	{
+		listType = type;
+		if (listType.equals("stack"))
+		{
+			myHashMap = new TreeMap<Integer, Stack<Integer>>();
+		}
+		else if(listType.equals("queue"))
+		{
+			myHashMap = new TreeMap<Integer, Queue<Integer>>();
+		}
+	}
+
 	
 	void InsertInMap(int key, int value)
 	{
 		if(myHashMap.get(key) == null)
 		{
-			Stack<Integer>
+			if (listType.equals("stack"))
+			{
+				Stack<Integer> thisList = new Stack<>();
+				thisList.push(value);
+				myHashMap.put(key, thisList);
+			}
+			else if(listType.equals("queue"))
+			{
+				Queue<Integer> thisList = new LinkedList<>();
+				thisList.add(value);
+				myHashMap.put(key, thisList);
+			}			
+		}
+		else
+		{
+			if (listType.equals("stack"))
+			{
+				((Stack<Integer>)myHashMap.get(key)).push(value);
+			}
+			else if(listType.equals("queue"))
+			{
+				((Queue<Integer>)myHashMap.get(key)).add(value);
+			}			
 		}
 	}
+
 	
-	void SetHorizontalDistance(Node node)
+	void SetHorizontalDistance(Node root)
 	{
-		if(node == null)
+		if(root == null)
 		{
 			return;
 		}
 		
-		node.hd = 0;
+		root.hd = 0;
 
-		if(node.left != null)
+		if(root.left != null)
 		{
-			SetHorizontalDistance(node.left, node.hd-1);
+			SetHorizontalDistance(root.left, root.hd-1);
 		}
-		if(node.right != null)
+		if(root.right != null)
 		{
-			SetHorizontalDistance(node.right, node.hd+1);
+			SetHorizontalDistance(root.right, root.hd+1);
 		}		
 	}
 	
@@ -60,37 +103,72 @@ public class BottomViewOfBinaryTree {
 		}		
 	}
 	
-	int[] array = new int[1000];
-	int arraySize = 0;
 	
-	void inOrder(Node currentNode)
+	void traverseTree_InOrder(Node currentNode)
 	{
 		if(currentNode == null)
 		{
 			return;
 		}
 		
-		inOrder(currentNode.left);
-		
-		// will save the data in the array only if it is a leaf node
-		if(currentNode.left == null && currentNode.right == null)
+		traverseTree_InOrder(currentNode.left);
+		System.out.print(currentNode.data + " ");
+		traverseTree_InOrder(currentNode.right);
+	}
+
+	void traverseTree_PreOrder(Node currentNode)
+	{
+		if(currentNode == null)
 		{
-			array[arraySize] = currentNode.data;
-			arraySize++;
+			return;
 		}
-		inOrder(currentNode.right);
+		
+		System.out.print(currentNode.data + " ");
+		traverseTree_PreOrder(currentNode.left);
+		traverseTree_PreOrder(currentNode.right);
+	}
+
+	void traverseTree_PostOrder(Node currentNode)
+	{
+		if(currentNode == null)
+		{
+			return;
+		}
+		
+		traverseTree_PostOrder(currentNode.left);
+		traverseTree_PostOrder(currentNode.right);
+		System.out.print(currentNode.data + " ");
 	}
 	
-    void printArray()
-    {
-    	for (int i = 0; i < arraySize; i++)
-    	{
-    		System.out.print(array[i] + " ");
-    	}
-    	System.out.println();
-    }
+	void traverseTree_LevelOrder(Node currentNode)
+	{
+		if(currentNode == null)
+		{
+			return;
+		}
+		Queue<Node> queue = new LinkedList<Node>();
+
+		queue.add(currentNode);
+		
+		while(!queue.isEmpty())
+		{
+			Node toPrint = queue.remove();
+//			System.out.print(toPrint.data + " ");
+			InsertInMap(toPrint.hd, toPrint.data);
+			
+			if(toPrint.left != null)
+			{
+				queue.add(toPrint.left);
+			}
+			if(toPrint.right != null)
+			{
+				queue.add(toPrint.right);
+			}
+		}
+	}
+		
 	
-    public void bottomView(Node root)
+	public void bottomView(Node root)
     {
     	if(root == null)
     	{
@@ -98,17 +176,94 @@ public class BottomViewOfBinaryTree {
     	}
     	
     	SetHorizontalDistance(root);
-    	
-    	
-    	inOrder(root);
-    	printArray();
+    	traverseTree_LevelOrder(root);
+    	TraverseMyHashMap();
     }
     
+    public void TraverseMyHashMap()
+    {
+    	Iterator it = myHashMap.entrySet().iterator();
+		
+ //   	Iterator<Entry<Integer, Queue<Integer>>> it = myHashMap.entrySet().iterator();
+    	while(it.hasNext())
+    	{
+    		Map.Entry mapElement;
+    		if (listType.equals("stack"))
+    		{
+        		mapElement = (Map.Entry<Integer, Stack<Integer>>)it.next();
+        		System.out.println(mapElement.getKey() + " -> " + ((Stack<Integer>)mapElement.getValue()).peek());
+    		}
+    		else if(listType.equals("queue"))
+    		{
+        		mapElement = (Map.Entry<Integer, Queue<Integer>>)it.next();
+        		System.out.println(mapElement.getKey() + " -> " + ((Queue<Integer>)mapElement.getValue()).peek());
+    		}	
+
+
+    	}
+    }
     
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 
+		Node n20 = new Node(20);
+		Node n8 = new Node(8);
+		Node n22 = new Node(22);
+		Node n5 = new Node(5);
+		Node n3 = new Node(3);
+		Node n25 = new Node(25);
+		Node n10 = new Node(10);
+		Node n14 = new Node(14);
+		Node n4 = new Node(4);
+		
+		Node root = n20;
+		n20.left = n8;
+		n20.right = n22;
+		n8.left = n5;
+		n8.right = n3;
+		n3.left = n10;
+		n3.right = n14;
+		n22.right = n25;
+		n22.left = n4;
+		
+		System.out.println("Stack");
+		BottomViewOfBinaryTree bvbt = new BottomViewOfBinaryTree("stack");
+		bvbt.bottomView(root);
+
+		System.out.println("");
+/*		
+		System.out.println("Queue");
+		BottomViewOfBinaryTree bvbt2 = new BottomViewOfBinaryTree("queue");
+		bvbt2.bottomView(root);
+*/
+/*		
+		Node Node10 = new Node(10);
+		Node Node20 = new Node(20);
+		Node Node30 = new Node(30);
+		Node Node40 = new Node(40);
+		Node Node60 = new Node(60);
+		Node Node70 = new Node(70);
+		Node Node80 = new Node(80);
+		Node Node100 = new Node(100);
+
+		Node root = Node10;
+		Node10.left = Node20;
+		Node10.right = Node30;
+		Node20.left = Node40;
+		Node20.right = Node60;
+		Node30.left = Node80;
+		Node30.right = Node70;
+		Node80.left = Node100;
+		
+		BottomViewOfBinaryTree bvbt = new BottomViewOfBinaryTree("queue");
+		bvbt.traverseTree_InOrder(root);
+		System.out.println("");
+		bvbt.traverseTree_PreOrder(root);
+		System.out.println("");
+		bvbt.traverseTree_PostOrder(root);
+		System.out.println("");
+		bvbt.traverseTree_LevelOrder(root);
+*/
 	}
 
 }
