@@ -22,51 +22,20 @@ class Node
 }
 
 public class BottomViewOfBinaryTree {
-	String listType = "stack";
-	TreeMap myHashMap;
+	TreeMap<Integer, Stack<Integer>> myHashMap = new TreeMap<Integer, Stack<Integer>>();
 
-	
-	BottomViewOfBinaryTree(String type)
-	{
-		listType = type;
-		if (listType.equals("stack"))
-		{
-			myHashMap = new TreeMap<Integer, Stack<Integer>>();
-		}
-		else if(listType.equals("queue"))
-		{
-			myHashMap = new TreeMap<Integer, Queue<Integer>>();
-		}
-	}
-
-	
+		
 	void InsertInMap(int key, int value)
 	{
 		if(myHashMap.get(key) == null)
 		{
-			if (listType.equals("stack"))
-			{
-				Stack<Integer> thisList = new Stack<>();
-				thisList.push(value);
-				myHashMap.put(key, thisList);
-			}
-			else if(listType.equals("queue"))
-			{
-				Queue<Integer> thisList = new LinkedList<>();
-				thisList.add(value);
-				myHashMap.put(key, thisList);
-			}			
+			Stack<Integer> thisList = new Stack<>();
+			thisList.push(value);
+			myHashMap.put(key, thisList);
 		}
 		else
 		{
-			if (listType.equals("stack"))
-			{
-				((Stack<Integer>)myHashMap.get(key)).push(value);
-			}
-			else if(listType.equals("queue"))
-			{
-				((Queue<Integer>)myHashMap.get(key)).add(value);
-			}			
+			((Stack<Integer>)myHashMap.get(key)).push(value);
 		}
 	}
 
@@ -182,24 +151,12 @@ public class BottomViewOfBinaryTree {
     
     public void TraverseMyHashMap()
     {
-    	Iterator it = myHashMap.entrySet().iterator();
+    	Iterator<Entry<Integer, Stack<Integer>>> it = myHashMap.entrySet().iterator();
 		
- //   	Iterator<Entry<Integer, Queue<Integer>>> it = myHashMap.entrySet().iterator();
     	while(it.hasNext())
     	{
-    		Map.Entry mapElement;
-    		if (listType.equals("stack"))
-    		{
-        		mapElement = (Map.Entry<Integer, Stack<Integer>>)it.next();
-        		System.out.println(mapElement.getKey() + " -> " + ((Stack<Integer>)mapElement.getValue()).peek());
-    		}
-    		else if(listType.equals("queue"))
-    		{
-        		mapElement = (Map.Entry<Integer, Queue<Integer>>)it.next();
-        		System.out.println(mapElement.getKey() + " -> " + ((Queue<Integer>)mapElement.getValue()).peek());
-    		}	
-
-
+    		Map.Entry<Integer, Stack<Integer>> mapElement = (Map.Entry<Integer, Stack<Integer>>)it.next();
+        	System.out.print(((Stack<Integer>)mapElement.getValue()).peek() + " ");
     	}
     }
     
@@ -226,8 +183,7 @@ public class BottomViewOfBinaryTree {
 		n22.right = n25;
 		n22.left = n4;
 		
-		System.out.println("Stack");
-		BottomViewOfBinaryTree bvbt = new BottomViewOfBinaryTree("stack");
+		BottomViewOfBinaryTree bvbt = new BottomViewOfBinaryTree();
 		bvbt.bottomView(root);
 
 		System.out.println("");
