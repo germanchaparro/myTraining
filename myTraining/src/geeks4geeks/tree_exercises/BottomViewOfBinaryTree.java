@@ -8,7 +8,7 @@ import java.util.Queue;
 import java.util.Stack;
 import java.util.TreeMap;
 
-class Node
+class Node_
 {
     int data;
     int hd;
